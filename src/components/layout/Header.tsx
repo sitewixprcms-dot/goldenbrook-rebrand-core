@@ -16,6 +16,7 @@ const navLinks = [
     ],
   },
   { name: "Sustainability", path: "/sustainability" },
+  { name: "Inspiration", path: "/inspiration" },
   { name: "Contact Us", path: "/contact" },
 ];
 
@@ -26,24 +27,33 @@ export const Header = () => {
 
   const isActive = (path: string) => location.pathname === path;
   const isParentActive = (item: typeof navLinks[0]) => {
-    if (item.children) {
+    if ('children' in item && item.children) {
       return item.children.some(child => location.pathname === child.path) || location.pathname === item.path;
     }
     return isActive(item.path);
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-primary">
       <div className="gb-container">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full border-2 border-secondary flex items-center justify-center">
-              <span className="text-secondary font-serif text-lg font-semibold">GB</span>
+            <div className="flex flex-col items-center">
+              <svg 
+                viewBox="0 0 40 40" 
+                className="w-10 h-10 text-secondary"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <path d="M20 5 L20 20 M20 20 L8 12 M20 20 L32 12 M20 20 L20 35" />
+                <circle cx="20" cy="20" r="15" />
+              </svg>
             </div>
             <div className="hidden sm:block">
-              <p className="text-primary-foreground font-serif text-xl tracking-widest">GOLDEN</p>
-              <p className="text-primary-foreground font-serif text-sm tracking-[0.3em] -mt-1">BROOK</p>
+              <p className="text-primary-foreground font-serif text-lg tracking-[0.25em]">GOLDEN</p>
+              <p className="text-primary-foreground font-serif text-xs tracking-[0.35em] -mt-0.5">BROOK</p>
             </div>
           </Link>
 
@@ -53,7 +63,7 @@ export const Header = () => {
               <div
                 key={item.name}
                 className="relative"
-                onMouseEnter={() => item.children && setOpenDropdown(item.name)}
+                onMouseEnter={() => 'children' in item && item.children && setOpenDropdown(item.name)}
                 onMouseLeave={() => setOpenDropdown(null)}
               >
                 <Link
@@ -65,11 +75,11 @@ export const Header = () => {
                   }`}
                 >
                   {item.name}
-                  {item.children && <ChevronDown className="w-4 h-4" />}
+                  {'children' in item && item.children && <ChevronDown className="w-3 h-3" />}
                 </Link>
 
                 {/* Dropdown */}
-                {item.children && (
+                {'children' in item && item.children && (
                   <AnimatePresence>
                     {openDropdown === item.name && (
                       <motion.div
@@ -77,7 +87,7 @@ export const Header = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-full left-0 mt-2 w-48 bg-card rounded-sm shadow-lg border border-border overflow-hidden"
+                        className="absolute top-full left-0 mt-0 w-48 bg-card rounded-sm shadow-xl border border-border overflow-hidden z-50"
                       >
                         {item.children.map((child) => (
                           <Link
@@ -86,7 +96,7 @@ export const Header = () => {
                             className={`block px-4 py-3 text-sm transition-colors ${
                               isActive(child.path)
                                 ? "bg-secondary/10 text-secondary"
-                                : "text-foreground hover:bg-muted"
+                                : "text-foreground hover:bg-muted hover:text-foreground"
                             }`}
                           >
                             {child.name}
@@ -99,13 +109,6 @@ export const Header = () => {
               </div>
             ))}
           </nav>
-
-          {/* CTA Button */}
-          <div className="hidden lg:block">
-            <Button asChild variant="secondary" className="font-medium">
-              <Link to="/contact">Get a Quote</Link>
-            </Button>
-          </div>
 
           {/* Mobile Menu Toggle */}
           <button
@@ -132,7 +135,7 @@ export const Header = () => {
                 <div key={item.name}>
                   <Link
                     to={item.path}
-                    onClick={() => !item.children && setIsMobileMenuOpen(false)}
+                    onClick={() => !('children' in item && item.children) && setIsMobileMenuOpen(false)}
                     className={`block px-4 py-3 text-sm font-medium transition-colors ${
                       isParentActive(item)
                         ? "text-secondary"
@@ -141,7 +144,7 @@ export const Header = () => {
                   >
                     {item.name}
                   </Link>
-                  {item.children && (
+                  {'children' in item && item.children && (
                     <div className="ml-4 border-l border-primary-foreground/20 pl-4">
                       {item.children.map((child) => (
                         <Link

@@ -9,6 +9,7 @@ import OurApproach from "./pages/OurApproach";
 import Residential from "./pages/Residential";
 import Commercial from "./pages/Commercial";
 import Sustainability from "./pages/Sustainability";
+import Inspiration from "./pages/Inspiration";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/our-approach/residential" element={<Residential />} />
           <Route path="/our-approach/commercial" element={<Commercial />} />
           <Route path="/sustainability" element={<Sustainability />} />
+          <Route path="/inspiration" element={<Inspiration />} />
           <Route path="/contact" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
